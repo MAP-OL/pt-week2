@@ -175,3 +175,30 @@ ggplot(data = caro,mapping=aes(x=DatetimeUTC, y=speed))+
 
 #The different lines for the different temporal granularities show a different amount of data, whereas the 1 minute trajectory covers a lot of Points and Speeding times, the amount of data decreases and 'tracking gaps' occur.
 
+#Task 4
+install.packages("zoo")
+library(zoo)
+example <- rnorm(10)
+rollmean(example,k = 3,fill = NA,align = "left")
+rollmean(example,k = 4,fill = NA,align = "left")
+
+caroroll<-caro
+
+caroroll$roll3<- rollmean(caro$speed,k=3,fill= NA, align= "left")
+caroroll$roll6<- rollmean(caro$speed,k=6,fill= NA, align= "left")
+caroroll$roll9<- rollmean(caro$speed,k=9,fill= NA, align= "left")
+View(caroroll)
+
+
+#Output Vizualisation 
+#Not quite sure if this is the desired outcome. I am still a little bit unsure if I chose the k values correctly.
+
+ggplot(data = caroroll,mapping=aes(x=DatetimeUTC, y=speed))+
+  geom_line(data = caroroll,mapping=aes(y=roll3,colour="k3"))+
+  geom_line(data = caroroll,mapping=aes(y=roll6,colour="k6"))+
+  geom_line(data = caroroll,mapping=aes(y=roll9,colour="k9"))+
+  theme_light()+
+  labs(color="Window size", title = "Different Speed windows")+
+  theme(title=element_text(size=10))+
+  xlab("Time")+
+  ylab("Speed (m/s)")
