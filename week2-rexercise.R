@@ -42,7 +42,6 @@ difftime(Begin, End, units="days")
 ggplot(data=Wildschwein, aes(x=DatetimeUTC,y=timelag,colour=TierID))+
   geom_point()+
   geom_line()
-  
 #The graph shows that in the beginning of the sampling period only individual 002A was tracked and then in the beginning of November the individuals were tracked concurrently. 
 
 #What is the temporal sampling interval between the locations?
@@ -56,6 +55,16 @@ ggplot(data=Wildschwein,mapping=aes(x=timelag))+
   scale_y_log10()+
   xlim(0,15000)+
   theme_classic()
-
 #the mean for all individuals is around 1400.
 
+##Task 2
+Wildschwein <- Wildschwein %>%
+  group_by(TierID) %>%
+  mutate(steplength = sqrt((E- lead(E,1))^2 + (N -lead(N,1))^2))
+
+Wildschwein <- Wildschwein %>%
+  mutate(speed=steplength/timelag)
+
+View(Wildschwein)
+#What speed unit do you get?
+#Answer: m/s
